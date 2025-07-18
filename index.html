@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookSwipe - The Tinder for Book Trading</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RJGYGZ0KB2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-RJGYGZ0KB2');
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
@@ -385,10 +396,21 @@
     </footer>
     
     <script>
-        // Configuration - REPLACE WITH YOUR GOOGLE SHEETS WEB APP URL
+        // Configuration - Your Google Sheets Web App URL
         const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyTVyk3K8UnbPhWyZK92zZjYtyj8__60pnfpKYJKzYE_n2K0KmTbeOx3LFWP8o0OfV7Mg/exec';
         
         let signupCount = 1247;
+        
+        // Function to track email signups in Google Analytics
+        function trackEmailSignup(source) {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'email_signup', {
+                    'event_category': 'engagement',
+                    'event_label': source,
+                    'value': 1
+                });
+            }
+        }
         
         // Update all signup counters
         function updateSignupCounters() {
@@ -436,6 +458,9 @@
             // Update counter
             signupCount++;
             updateSignupCounters();
+            
+            // Track in Google Analytics
+            trackEmailSignup(formType);
         }
         
         // Submit email to Google Sheets
@@ -490,6 +515,14 @@
         
         // Initialize counters
         updateSignupCounters();
+        
+        // Track page views
+        if (typeof gtag !== 'undefined') {
+            gtag('config', 'G-RJGYGZ0KB2', {
+                page_title: 'BookSwipe Landing Page',
+                page_location: window.location.href
+            });
+        }
         
         // Smooth scrolling for any anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
